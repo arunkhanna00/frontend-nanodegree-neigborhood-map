@@ -1,1 +1,1 @@
-.row{width:100%}.col-3{width:25%}.col-9{width:75%}
+#map,.row,body,html{height:100%}.row{width:100%;display:flex;flex-wrap:wrap}.col-3{width:25%}.col-9{width:75%}

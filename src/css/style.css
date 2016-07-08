@@ -1,11 +1,27 @@
+html, body, .row, #map {
+    /* Make sure the height is 100% so that the map can load properly */
+    height: 100%;
+}
+
 .row {
+    /* Setup a row with a width of 100% */
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .col-3 {
+    /* Set the width of the search section to take up 25% of the page width */
     width: 25%;
 }
 
 .col-9 {
+    /* Set the width of the map section to take up 75% of the page width */
     width: 75%;
 }
+
+
+
+
+
+
