@@ -20,12 +20,32 @@ var restaurantLocations =
     {
         name: "Umami Burger",
         loc: {lat: 34.019144, lng: -118.492336}
+    },
+    {
+        name: "Pacific Dining Car",
+        loc: {lat: 34.039573, lng: -118.476822}
+    },
+    {
+        name: "Chandni",
+        loc: {lat: 34.036434, lng: -118.483516}
+    },
+    {
+        name: "Z Garden Mediterranean Cuisine",
+        loc: {lat: 34.026191, lng: -118.465835}
+    },
+    {
+        name: "Cha Cha Chicken",
+        loc: {lat: 34.009191, lng: -118.490940}
+    },
+    {
+        name: "Huckleberry Café",
+        loc: {lat: 34.024582, lng: -118.492053}
     }];
 
 function initMap() {
     // Setup map using google maps API
     var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 34.0182677, lng: -118.4745879}, // Santa Monica
+        center: {lat: 34.023, lng: -118.48}, // Santa Monica
         zoom: 14
     });
 
