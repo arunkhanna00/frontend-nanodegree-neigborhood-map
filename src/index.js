@@ -1,3 +1,23 @@
+var map; // Setup gloval variable for map
+
+function initMap() {
+    // Setup map using google maps API
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 34.023, lng: -118.48}, // Santa Monica
+        zoom: 14
+    });
+
+    // For each restaurant create a pin
+    restaurantLocations.forEach(function(location) {
+        location.marker = new google.maps.Marker ({
+            position: location.loc,
+            title: location.name
+        });
+        location.marker.setMap(map);
+    });
+
+}
+
 var restaurantLocations =
     // Setup hardcoded locations of restaurants in Santa Monica
     [
@@ -42,28 +62,39 @@ var restaurantLocations =
         loc: {lat: 34.024582, lng: -118.492053}
     }];
 
-function initMap() {
-    // Setup map using google maps API
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 34.023, lng: -118.48}, // Santa Monica
-        zoom: 14
-    });
-
-    // For each restaurant create a pin
-    restaurantLocations.forEach(function(location) {
-        location.marker = new google.maps.Marker ({
-            position: location.loc,
-            title: location.name
-        });
-        location.marker.setMap(map);
-    });
-}
-
 var viewModel = function() {
+    var self = this;
     // Data
-    // Set initial locations to the global restaurant locations
-    this.viewableLocations = ko.observableArray(restaurantLocations);
-};
 
+    // Set the initial locations to be viewed as a copy
+    // of the global array of all restaurants
+    this.viewableLocations = ko.observableArray(restaurantLocations.slice(0));
+
+    // Set the initial value to be searched
+    this.searchVal =  ko.observable('');
+
+    // Functions
+    // Call the search function every time the search value changes
+    var search = function(query) {
+        // Remove all the viewable restaurant locations
+        self.viewableLocations.removeAll();
+        // Loop through each restaurant
+        for (var restaurantNum = 0; restaurantNum < restaurantLocations.length; restaurantNum++) {
+            // Remove all pins
+            restaurantLocations[restaurantNum].marker.setMap(null);
+            // If the search value is found in the list of restaurants
+            if(restaurantLocations[restaurantNum].name.toLowerCase().indexOf(query) >= 0) {
+                // Make the restaurant viewable
+                self.viewableLocations.push(restaurantLocations[restaurantNum]);
+                // Add the pin to the map
+                restaurantLocations[restaurantNum].marker.setMap(map);
+            }
+        }
+    }
+    // Call the seach function everytime the searchVal
+    // is changed using knockout's subscribe function
+    self.searchVal.subscribe(search);
+
+};
 // Apply knockout bindings
 ko.applyBindings(new viewModel());
