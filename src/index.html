@@ -9,6 +9,7 @@
     <body>
         <div class="row">
             <div class="col-3">
+                <input type="search" data-bind="value: searchVal, valueUpdate: 'keyup'">
                 <ul data-bind="foreach: viewableLocations">
                     <li data-bind="text: name"></li>
                 </ul>
