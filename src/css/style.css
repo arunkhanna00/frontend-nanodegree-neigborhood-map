@@ -20,6 +20,17 @@ html, body, .row, #map {
     width: 75%;
 }
 
+.list-group {
+    /* Remove the top margin in the list of restaurants*/
+    margin-top: 0;
+}
+
+.search {
+    /* Set styling for search bar*/
+    padding-left: 15px;
+    width: calc(100% - 18px);
+    height: 40px;
+}
 
 
 
