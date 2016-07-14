@@ -1,36 +1,5 @@
 var map; // Setup gloval variable for map
-function initMap() {
-    // Setup map using google maps API
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 34.027908, lng: -118.48}, // Santa Monica
-        zoom: 14
-    });
-    // Create infowindow
-    var infowindow = new google.maps.InfoWindow({
-      content: null
-    });
-
-    // For each restaurant create a pin and display an infoWindow
-    // when the pin is clicked on
-    restaurantLocations.forEach(function(location) {
-        // Create marker
-        location.marker = new google.maps.Marker ({
-            position: location.loc,
-            title: location.name
-        });
-       location.marker.addListener('click', function() {
-            // Add an animation that ends after 700 ms(1 bounce)
-            location.marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function(){ location.marker.setAnimation(null); }, 750);
-            // Display an infoWindow when a pin is clicked on
-            infowindow.setContent(location.name);
-            infowindow.open(map, location.marker);
-        });
-        // Display markers on page
-        location.marker.setMap(map);
-    });
-
-}
+var infowindow; // Setup global variable for infoWindow
 
 var restaurantLocations =
     // Setup hardcoded locations of restaurants in Santa Monica
@@ -74,7 +43,45 @@ var restaurantLocations =
     {
         name: "Huckleberry Café",
         loc: {lat: 34.024582, lng: -118.492053}
-    }];
+}];
+
+var initMap = function() {
+    // Setup map using google maps API
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 34.027908, lng: -118.48}, // Santa Monica
+        zoom: 14
+    });
+    // Create infowindow
+    infowindow = new google.maps.InfoWindow({
+      content: null
+    });
+
+    // For each restaurant create a pin and display an infoWindow
+    // when the pin is clicked on
+    restaurantLocations.forEach(function(location) {
+        // Create marker
+        location.marker = new google.maps.Marker ({
+            position: location.loc,
+            title: location.name
+        });
+       location.marker.addListener('click', function() {
+            // Call displayInfoWindow when a pin is clicked
+            displayInfoWindow(location);
+        });
+        // Display markers on page
+        location.marker.setMap(map);
+    });
+
+};
+
+var displayInfoWindow = function(location) {
+    // Add an animation that ends after 700 ms(1 bounce)
+    location.marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){ location.marker.setAnimation(null); }, 750);
+    // Display an infoWindow when a pin is clicked on
+    infowindow.setContent(location.name);
+    infowindow.open(map, location.marker);
+};
 
 var viewModel = function() {
     var self = this;
@@ -82,12 +89,13 @@ var viewModel = function() {
 
     // Set the initial locations to be viewed as a copy
     // of the global array of all restaurants
-    this.viewableLocations = ko.observableArray(restaurantLocations.slice(0));
+    self.viewableLocations = ko.observableArray(restaurantLocations.slice(0));
 
     // Set the initial value to be searched
-    this.searchVal =  ko.observable('');
+    self.searchVal =  ko.observable('');
 
     // Functions
+
     // Call the search function every time the search value changes
     var search = function(query) {
         // Remove all the viewable restaurant locations
@@ -97,16 +105,23 @@ var viewModel = function() {
             // Remove all pins
             restaurantLocations[restaurantNum].marker.setMap(null);
             // If the search value is found in the list of restaurants
-            if(restaurantLocations[restaurantNum].name.toLowerCase().indexOf(query) >= 0) {
+            if (restaurantLocations[restaurantNum].name.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
                 // Make the restaurant viewable
                 self.viewableLocations.push(restaurantLocations[restaurantNum]);
                 // Add the pin to the map
                 restaurantLocations[restaurantNum].marker.setMap(map);
             }
         }
-    }
-    // Call the seach function everytime the searchVal
-    // is changed using knockout's subscribe function
+    };
+
+    self.clickLocationOnList = function(location) {
+        // Call displayInfoWindow when a location on the list
+        // is clicked on
+        displayInfoWindow(location);
+    };
+
+    // Call the seach function everytime the searchVal is changed
+    // using knockout's subscribe function
     self.searchVal.subscribe(search);
 
 };
