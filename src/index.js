@@ -18,9 +18,11 @@ function initMap() {
             position: location.loc,
             title: location.name
         });
-        // Add a click function that opens an infoWindow when
-        // the pin is clicked on
        location.marker.addListener('click', function() {
+            // Add an animation that ends after 700 ms(1 bounce)
+            location.marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function(){ location.marker.setAnimation(null); }, 750);
+            // Display an infoWindow when a pin is clicked on
             infowindow.setContent(location.name);
             infowindow.open(map, location.marker);
         });
