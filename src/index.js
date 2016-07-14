@@ -1,18 +1,30 @@
 var map; // Setup gloval variable for map
-
 function initMap() {
     // Setup map using google maps API
     map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 34.023, lng: -118.48}, // Santa Monica
+        center: {lat: 34.027908, lng: -118.48}, // Santa Monica
         zoom: 14
     });
+    // Create infowindow
+    var infowindow = new google.maps.InfoWindow({
+      content: null
+    });
 
-    // For each restaurant create a pin
+    // For each restaurant create a pin and display an infoWindow
+    // when the pin is clicked on
     restaurantLocations.forEach(function(location) {
+        // Create marker
         location.marker = new google.maps.Marker ({
             position: location.loc,
             title: location.name
         });
+        // Add a click function that opens an infoWindow when
+        // the pin is clicked on
+       location.marker.addListener('click', function() {
+            infowindow.setContent(location.name);
+            infowindow.open(map, location.marker);
+        });
+        // Display markers on page
         location.marker.setMap(map);
     });
 
