@@ -5,13 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Neighborhood Map</title>
         <link rel="stylesheet" href="css/style.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+
     </head>
     <body>
         <div class="row">
             <div class="col-3">
-                <input type="search" data-bind="value: searchVal, valueUpdate: 'keyup'">
-                <ul data-bind="foreach: viewableLocations">
-                    <li data-bind="text: name"></li>
+                <input type="search" data-bind="value: searchVal, valueUpdate: 'keyup'" class="search">
+                <ul data-bind="foreach: viewableLocations" class="list-group">
+                    <a href="#" data-bind="text: name, click: $parent.clickLocationOnList" class="list-group-item"></li>
                 </ul>
             </div>
             <div class="col-9">
